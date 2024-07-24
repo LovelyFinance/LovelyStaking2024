@@ -268,7 +268,7 @@ contract LovelyStaking is Ownable, ReentrancyGuard {
         contractInfo.launchTime = block.timestamp;
    }
 
-   function stake(uint poolId, uint256 tokenamount) external
+   function stake(uint poolId, uint256 tokenamount) external nonReentrant
    {
         require(tokenamount > 0, "Token amount is zero");
         require((poolId == 0 || (contractInfo.launchTime + contractInfo.maxDaysToClose >= block.timestamp)),"StakeTime is over");
@@ -294,7 +294,7 @@ contract LovelyStaking is Ownable, ReentrancyGuard {
         _withdrawRewards(poolId, stakeIndex, false);
     }
 
-    function unstake(uint poolId, uint stakeIndex) external {
+    function unstake(uint poolId, uint stakeIndex) external nonReentrant {
         uint256 stakedamount = stakeInfo[msg.sender][poolId][stakeIndex].amount;
         require(stakedamount > 0, "Invalid stake");
         require(stakeInfo[msg.sender][poolId][stakeIndex].stakeEndTime <= block.timestamp,"Cannot unstake early");
